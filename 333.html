@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поймай кнопку!</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .button {
+            padding: 20px 40px;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            position: absolute;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+            transform: scale(1.1);
+        }
+
+        #score, #timer {
+            margin-top: 15px;
+            font-size: 20px;
+        }
+
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <button id="gameButton" class="button">Нажми меня!</button>
+        <div id="score">Очки: 0</div>
+        <div id="timer">Осталось: 60 секунд</div>
+    </div>
+    <script>
+        const button = document.getElementById('gameButton');
+        const scoreDisplay = document.getElementById('score');
+        const timerDisplay = document.getElementById('timer');
+
+        let score = 0;
+        let gameDuration = 60000; // 1 минута
+        let remainingTime = gameDuration;
+        let gameInterval;
+        let buttonInterval;
+
+        function startGame() {
+            button.style.top = `${Math.random() * (window.innerHeight - 100)}px`;
+            button.style.left = `${Math.random() * (window.innerWidth - 100)}px`;
+            button.style.position = 'absolute';
+
+            score = 0;
+            scoreDisplay.textContent = `Очки: ${score}`;
+
+            gameInterval = setInterval(() => {
+                remainingTime -= 1000;
+                timerDisplay.textContent = `Осталось: ${Math.floor(remainingTime / 1000)} секунд`;
+
+                if (remainingTime <= 0) {
+                    clearInterval(gameInterval);
+                    clearInterval(buttonInterval);
+                    alert(`Игра окончена! Ваш счёт: ${score}`);
+                    button.style.display = 'none';
+                }
+            }, 1000);
+
+            buttonInterval = setInterval(() => {
+                button.style.top = `${Math.random() * (window.innerHeight - 100)}px`;
+                button.style.left = `${Math.random() * (window.innerWidth - 100)}px`;
+            }, 1000);
+
+            button.onclick = () => {
+                score++;
+                scoreDisplay.textContent = `Очки: ${score}`;
+                button.style.animation = 'bounce 0.5s';
+            };
+        }
+
+        startGame();
+    </script>
+</body>
+</html>
